@@ -76,6 +76,20 @@ function Sidebar() {
                   rounded-full ring-2 ring-zinc-900"
                 />
               )}
+
+              {/* <span
+                className="absolute -top-1 -right-1 bg-red-600 text-white text-[10px]
+                  rounded-full w-5 h-5 flex items-center justify-center font-bold shadow-md"
+              >
+                {unreadCounts[user._id] > 9 ? "9+" : unreadCounts[user._id]}
+                "9+"
+              </span> */}
+              <span
+                className="absolute top-0 left-0 badge badge-sm w-5 h-5 rounded-full 
+             flex items-center bg-primary border-0 justify-center text-[10px]"
+              >
+                12
+              </span>
             </div>
 
             <div className="hidden lg:block text-left min-w-0">

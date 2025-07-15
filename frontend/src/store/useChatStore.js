@@ -6,6 +6,7 @@ import useAuthStore from "./useAuthStore";
 const useChatStore = create((set, get) => ({
   messages: [],
   users: [],
+  unreadMessageCounts: null,
 
   selectedUser: null,
   isUsersLoading: false,
@@ -75,6 +76,15 @@ const useChatStore = create((set, get) => ({
     const { socket } = useAuthStore.getState();
 
     socket.off("newMessage");
+  },
+
+  unreadMessages: () => {
+    const { socket } = useAuthStore.getState();
+
+    socket.on("unreadMessages", (unreadMessagesMap) => {
+      if (!unreadMessagesMap) return;
+      set({ unreadMessageCounts: unreadMessagesMap });
+    });
   },
 }));
 

@@ -3,9 +3,18 @@ import Sidebar from "../components/Sidebar";
 
 import Chat from "../components/Chat";
 import useChatStore from "../store/useChatStore";
+import { useEffect } from "react";
 
 function HomePage() {
-  const { selectedUser } = useChatStore();
+  const { selectedUser, unreadMessages, unreadMessageCounts } = useChatStore();
+
+  useEffect(
+    function () {
+      unreadMessages();
+    },
+    [unreadMessages]
+  );
+  console.log(unreadMessageCounts);
 
   return (
     <div className="h-screen bg-base-200">
