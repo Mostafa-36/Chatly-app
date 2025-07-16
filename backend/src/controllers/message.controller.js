@@ -1,8 +1,12 @@
 import cloudinary from "../lib/cloudinary.js";
-import { getSocketIdForUser, io } from "../lib/socket.js";
+import { currentChatMap, getSocketIdForUser, io } from "../lib/socket.js";
 import Message from "../models/message.model.js";
 import User from "../models/user.model.js";
 import catchAsync from "../utils/catchAsync.js";
+import {
+  getUnreadMessagesGroupedBySender,
+  incrementUnreadCount,
+} from "../utils/getUnreadMessagesGroupedBySender.js";
 
 export const getChatContacts = catchAsync(async (req, res, next) => {
   const loggedInUserId = req.user._id;
@@ -61,6 +65,14 @@ export const sendMessage = catchAsync(async (req, res, next) => {
 
   if (receiverSocketId) {
     io.to(receiverSocketId).emit("newMessage", message);
+
+    if (currentChatMap[receiverId] !== senderId.toString()) {
+      incrementUnreadCount(receiverId, senderId);
+      io.to(receiverSocketId).emit(
+        "unreadMessages",
+        await getUnreadMessagesGroupedBySender(receiverId, receiverSocketId)
+      );
+    }
   }
 
   res.status(201).json({ status: "success", data: message });
