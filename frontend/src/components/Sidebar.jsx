@@ -6,8 +6,15 @@ import useAuthStore from "../store/useAuthStore.js";
 import { useState } from "react";
 
 function Sidebar() {
-  const { users, setSelectedUser, selectedUser, getUsers, isUsersLoading } =
-    useChatStore();
+  const {
+    users,
+    setSelectedUser,
+    selectedUser,
+    getUsers,
+    isUsersLoading,
+    unreadMessageCounts,
+    unreadMessages,
+  } = useChatStore();
 
   const { onlineUsers } = useAuthStore();
 
@@ -19,9 +26,14 @@ function Sidebar() {
 
   useEffect(
     function () {
-      getUsers();
+      async function fetch() {
+        await getUsers();
+      }
+      fetch();
+
+      unreadMessages();
     },
-    [getUsers]
+    [getUsers, unreadMessages]
   );
 
   if (isUsersLoading) return <SidebarSkeleton />;
@@ -84,12 +96,14 @@ function Sidebar() {
                 {unreadCounts[user._id] > 9 ? "9+" : unreadCounts[user._id]}
                 "9+"
               </span> */}
-              <span
-                className="absolute top-0 left-0 badge badge-sm w-5 h-5 rounded-full 
+              {unreadMessageCounts[user._id] && (
+                <span
+                  className="absolute top-0 left-0 badge badge-sm w-5 h-5 rounded-full 
              flex items-center bg-primary border-0 justify-center text-[10px]"
-              >
-                12
-              </span>
+                >
+                  {unreadMessageCounts[user._id]}
+                </span>
+              )}
             </div>
 
             <div className="hidden lg:block text-left min-w-0">

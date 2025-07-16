@@ -37,8 +37,11 @@ io.on("connection", async (socket) => {
   );
 
   socket.on("openChat", ({ userId, withUserId }) => {
-    // console.log({ userId, withUserId }, "➖➖➖➖");
     currentChatMap[userId] = withUserId;
+  });
+
+  socket.on("closeChat", (userId) => {
+    delete currentChatMap[userId];
   });
 
   socket.on("markMessagesAsSeen", async ({ senderId, receiverId }) => {
@@ -51,12 +54,18 @@ io.on("connection", async (socket) => {
         },
         { $set: { isSeen: true } }
       );
+      console.log(unreadMessagesCache);
 
       clearUnreadFromSender(receiverId, senderId);
 
-      const socketId = getSocketIdForUser(receiverId);
-      if (socketId) {
-        io.to(socketId).emit("unreadMessages", unreadMessagesCache[receiverId]);
+      console.log(unreadMessagesCache[receiverId], "🧑‍🤝‍🧑");
+
+      const receiverSocketId = getSocketIdForUser(receiverId);
+      if (receiverSocketId) {
+        io.to(receiverSocketId).emit(
+          "unreadMessages",
+          unreadMessagesCache[receiverId]
+        );
       }
     } catch (err) {
       console.error(" Error marking messages as seen:", err.message);

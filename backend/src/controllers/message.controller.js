@@ -54,11 +54,14 @@ export const sendMessage = catchAsync(async (req, res, next) => {
     imageUrl = uploadResult.secure_url;
   }
 
+  const isChatOpen = currentChatMap[receiverId] === senderId.toString();
+
   const message = await Message.create({
     receiverId,
     senderId,
     text,
     image: imageUrl,
+    isSeen: isChatOpen,
   });
 
   const receiverSocketId = getSocketIdForUser(receiverId);
@@ -66,11 +69,12 @@ export const sendMessage = catchAsync(async (req, res, next) => {
   if (receiverSocketId) {
     io.to(receiverSocketId).emit("newMessage", message);
 
-    if (currentChatMap[receiverId] !== senderId.toString()) {
+    if (!isChatOpen) {
       incrementUnreadCount(receiverId, senderId);
+
       io.to(receiverSocketId).emit(
         "unreadMessages",
-        await getUnreadMessagesGroupedBySender(receiverId, receiverSocketId)
+        await getUnreadMessagesGroupedBySender(receiverId, true)
       );
     }
   }

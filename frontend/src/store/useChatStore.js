@@ -6,7 +6,7 @@ import useAuthStore from "./useAuthStore";
 const useChatStore = create((set, get) => ({
   messages: [],
   users: [],
-  unreadMessageCounts: null,
+  unreadMessageCounts: {},
 
   selectedUser: null,
   isUsersLoading: false,
@@ -82,9 +82,39 @@ const useChatStore = create((set, get) => ({
     const { socket } = useAuthStore.getState();
 
     socket.on("unreadMessages", (unreadMessagesMap) => {
+      console.log(unreadMessagesMap);
+
       if (!unreadMessagesMap) return;
       set({ unreadMessageCounts: unreadMessagesMap });
     });
+  },
+
+  markMessagesAsSeen: () => {
+    const { socket, userAuth } = useAuthStore.getState();
+
+    socket.emit("markMessagesAsSeen", {
+      senderId: get().selectedUser?._id,
+      receiverId: userAuth?._id,
+    });
+
+    set((state) => {
+      const newCounts = { ...state.unreadMessageCounts };
+      delete newCounts[state.selectedUser?._id];
+      return { unreadMessageCounts: newCounts };
+    });
+  },
+
+  openChat: () => {
+    const { socket, userAuth } = useAuthStore.getState();
+    socket.emit("openChat", {
+      userId: userAuth._id,
+      withUserId: get().selectedUser?._id,
+    });
+  },
+
+  closeChat: () => {
+    const { socket, userAuth } = useAuthStore.getState();
+    socket.emit("closeChat", userAuth._id);
   },
 }));
 

@@ -4,8 +4,8 @@ import Message from "../models/message.model.js";
 export const unreadMessagesCache = {};
 
 export const getUnreadMessagesGroupedBySender = async (userId, isOnline) => {
-  if (unreadMessagesCache[userId] && isOnline)
-    return unreadMessagesCache[userId];
+  // if (unreadMessagesCache[userId] && isOnline)
+  //   return unreadMessagesCache[userId];
 
   try {
     const userObjectId = new mongoose.Types.ObjectId(userId);
@@ -41,6 +41,7 @@ export const getUnreadMessagesGroupedBySender = async (userId, isOnline) => {
 
 export const incrementUnreadCount = (receiverId, senderId) => {
   if (!unreadMessagesCache[receiverId]) unreadMessagesCache[receiverId] = {};
+
   if (!unreadMessagesCache[receiverId][senderId])
     unreadMessagesCache[receiverId][senderId] = 0;
 
@@ -48,7 +49,9 @@ export const incrementUnreadCount = (receiverId, senderId) => {
 };
 
 export const clearUnreadFromSender = (userId, senderId) => {
+  console.log("im work before", unreadMessagesCache[userId], "😡😡");
   if (unreadMessagesCache[userId]) {
     delete unreadMessagesCache[userId][senderId];
+    console.log("im work after", unreadMessagesCache[userId], "😡😡");
   }
 };

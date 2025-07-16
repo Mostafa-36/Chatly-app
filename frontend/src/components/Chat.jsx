@@ -23,6 +23,9 @@ export default function Chat({ children }) {
     subscribeToMessages,
     unsubscribeFromMessages,
     sendMessage,
+    markMessagesAsSeen,
+    openChat,
+    closeChat,
   } = useChatStore();
   const { userAuth } = useAuthStore();
 
@@ -33,12 +36,26 @@ export default function Chat({ children }) {
       async function fetchMessages() {
         await getMessages();
       }
+      openChat();
+
       fetchMessages();
       subscribeToMessages();
+      markMessagesAsSeen();
 
-      return () => unsubscribeFromMessages();
+      return () => {
+        unsubscribeFromMessages();
+        closeChat();
+      };
     },
-    [getMessages, selectedUser, subscribeToMessages, unsubscribeFromMessages]
+    [
+      getMessages,
+      selectedUser,
+      subscribeToMessages,
+      unsubscribeFromMessages,
+      markMessagesAsSeen,
+      openChat,
+      closeChat,
+    ]
   );
 
   useEffect(
