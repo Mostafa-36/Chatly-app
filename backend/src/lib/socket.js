@@ -23,8 +23,6 @@ const getSocketIdForUser = (userId) => {
 };
 
 io.on("connection", async (socket) => {
-  console.log("connected user:", socket.id);
-
   const userId = socket.handshake.query.userId;
 
   if (userId) usersSocketMap[userId] = socket.id;
@@ -54,11 +52,8 @@ io.on("connection", async (socket) => {
         },
         { $set: { isSeen: true } }
       );
-      console.log(unreadMessagesCache);
 
       clearUnreadFromSender(receiverId, senderId);
-
-      console.log(unreadMessagesCache[receiverId], "🧑‍🤝‍🧑");
 
       const receiverSocketId = getSocketIdForUser(receiverId);
       if (receiverSocketId) {
@@ -73,8 +68,6 @@ io.on("connection", async (socket) => {
   });
 
   socket.on("disconnect", () => {
-    console.log("disconnected user:", socket.id);
-
     delete usersSocketMap[userId];
     io.emit("getOnlineUsers", Object.keys(usersSocketMap));
   });

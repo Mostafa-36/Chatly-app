@@ -27,6 +27,8 @@ const useChatStore = create((set, get) => ({
 
   sendMessage: async (messageData) => {
     try {
+      if (!messageData?.text && !messageData?.image) return;
+
       const { selectedUser, messages } = get();
       const res = await axiosInstance.post(
         `/messages/${selectedUser._id}`,
@@ -82,8 +84,6 @@ const useChatStore = create((set, get) => ({
     const { socket } = useAuthStore.getState();
 
     socket.on("unreadMessages", (unreadMessagesMap) => {
-      console.log(unreadMessagesMap);
-
       if (!unreadMessagesMap) return;
       set({ unreadMessageCounts: unreadMessagesMap });
     });
@@ -114,7 +114,8 @@ const useChatStore = create((set, get) => ({
 
   closeChat: () => {
     const { socket, userAuth } = useAuthStore.getState();
-    socket.emit("closeChat", userAuth._id);
+    if (!userAuth?._id) return;
+    socket.emit("closeChat", userAuth?._id);
   },
 }));
 

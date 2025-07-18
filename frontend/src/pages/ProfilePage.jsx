@@ -22,8 +22,6 @@ function ProfilePage() {
     };
   };
 
-  console.log(userAuth);
-
   return (
     <div className="min-h-screen pt-20">
       <div className="max-w-2xl mx-auto p-4 py-8">
@@ -91,7 +89,7 @@ function ProfilePage() {
             </div>
           </div>
 
-          <AccountInfoCard />
+          <AccountInfoCard joinAt={userAuth?.createdAt} />
         </div>
       </div>
     </div>

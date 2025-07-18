@@ -1,8 +1,7 @@
-import { Send } from "lucide-react";
 import { THEMES } from "../constants";
 
-import useThemeStore from "../store/useThemeStore";
 import MockChatPreview from "../components/MockChatPreview";
+import useThemeStore from "../store/useThemeStore";
 
 function SettingsPage() {
   const { theme, setTheme } = useThemeStore();
@@ -18,7 +17,7 @@ function SettingsPage() {
         </div>
 
         <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-2">
-          {THEMES.map((t) => (
+          {THEMES?.map((t) => (
             <button
               key={t}
               className={`
@@ -39,7 +38,7 @@ function SettingsPage() {
                 </div>
               </div>
               <span className="text-[11px] font-medium truncate w-full text-center">
-                {t.charAt(0).toUpperCase() + t.slice(1)}
+                {t?.charAt(0).toUpperCase() + t.slice(1)}
               </span>
             </button>
           ))}

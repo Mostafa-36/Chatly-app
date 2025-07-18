@@ -1,12 +1,12 @@
 import NoChatSelected from "../components/NoChatSelected";
 import Sidebar from "../components/Sidebar";
 
+import { useEffect } from "react";
 import Chat from "../components/Chat";
 import useChatStore from "../store/useChatStore";
-import { useEffect } from "react";
 
 function HomePage() {
-  const { selectedUser, unreadMessages, unreadMessageCounts } = useChatStore();
+  const { selectedUser, unreadMessages } = useChatStore();
 
   useEffect(
     function () {
@@ -14,7 +14,6 @@ function HomePage() {
     },
     [unreadMessages]
   );
-  console.log(unreadMessageCounts);
 
   return (
     <div className="h-screen bg-base-200">

@@ -9,7 +9,6 @@ function SignUpPage() {
   const { isSigningUp, signup } = useAuthStore();
 
   async function hundleSubmit(data) {
-    console.log(data);
     await signup(data);
   }
   return (

@@ -15,6 +15,7 @@ Chatly App is a personal project I built to master full-stack development with r
 - 🧩 Clean, reusable components with **compound component pattern**
 - 📦 Modular backend with **centralized error handling**
 - ⚡ Real-time communication using **Socket.IO**
+- 🔔 Notification system with **unread message counter** for users who are offline or not currently in a chat (like WhatsApp)
 - 🎨 30+ theme options with full responsiveness
 - ✅ Scalable architecture and best practices
 
@@ -31,6 +32,7 @@ Chatly App is a personal project I built to master full-stack development with r
 - 🦴 Message skeletons for loading states
 - 🔐 Authentication (Signup / Login) using **JWT**
 - 💬 Real-time messaging with **WebSockets**
+- 🔢 **Unread message count badges** if a user sends messages to someone offline or not currently in the chat (like WhatsApp)
 - 🧠 Clean architecture using **compound component pattern**
 - ♻️ Reusable and maintainable code (frontend & backend)
 - ⚠️ Toast notifications & global error handling
@@ -57,6 +59,7 @@ Chatly App is a personal project I built to master full-stack development with r
 - Tailwind CSS
 - DaisyUI
 - Zustand (state management)
+- `useReducer` + `Context API` for compound pattern
 - React Hook Form
 - React Hot Toast
 - React Router DOM
